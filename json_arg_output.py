@@ -1,29 +1,30 @@
 #!/usr/bin/env python
-import json
-import sys
-import os
-import re
+from json import loads as json_loads
+from sys import stderr as sys_stderr
+from sys import exit as sys_exit
+from sys import argv as sys_argv
+from re import sub as re_sub
 
 
 def print_error(error_text):
-    sys.stderr.write("ERROR: " + error_text + "\n")
+    sys_stderr.write("ERROR: " + error_text + "\n")
 
 
 def print_info(info_text):
     print("INFO: " + info_text)
 
 
-if len(sys.argv) != 2:
+if len(sys_argv) != 2:
     print_error("To many or no arguments provided (one is required)")
-    sys.exit()
+    sys_exit()
 
 # try:
-with open(sys.argv[1]) as json_arg:
-    json_file_contents = json.loads(json_arg.read())
+with open(sys_argv[1]) as json_arg:
+    json_file_contents = json_loads(json_arg.read())
 
 # except:
 #         print_error("Error in opening or processing the argument file")
-#         sys.exit()
+#         sys_exit()
 
 for json_object in json_file_contents:
     aggr_uri = ""
@@ -133,14 +134,14 @@ for json_object in json_file_contents:
                         continue
 
                 if aggr_uri.endswith("&"):
-                    aggr_uri = re.sub("&$", "", aggr_uri)
+                    aggr_uri = re_sub("&$", "", aggr_uri)
 
     else:
         print_error(
             "Not building possible remaining query because path is empty for the domain:")
 
     if "port" in json_object and json_object["port"]:
-        try:    
+        try:
             if 1 <= json_object["port"] <= 65535:
                 aggr_uri += ":"
                 aggr_uri += str(json_object["port"])
