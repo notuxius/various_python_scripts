@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from json import loads as json_loads
+from json.decoder import JSONDecodeError
 from sys import stderr as sys_stderr
 from sys import exit as sys_exit
 from sys import argv as sys_argv
@@ -14,17 +15,25 @@ def print_info(info_text):
     print("INFO: " + info_text)
 
 
-if len(sys_argv) != 2:
-    print_error("To many or no arguments provided (one is required)")
+try:
+    with open(sys_argv[1]) as json_arg:
+        json_file_contents = json_loads(json_arg.read())
+
+except JSONDecodeError:
+    print_error("Bad JSON file syntax")
     sys_exit()
 
-# try:
-with open(sys_argv[1]) as json_arg:
-    json_file_contents = json_loads(json_arg.read())
+except PermissionError:
+    print_error("Reading of the JSON file denied")
 
-# except:
-#         print_error("Error in opening or processing the argument file")
-#         sys_exit()
+except IndexError:
+    print_error("No JSON file provided")
+    sys_exit()
+
+except FileNotFoundError:
+    print_error("File not found")
+    sys_exit()
+
 
 for json_object in json_file_contents:
     aggr_uri = ""
@@ -36,7 +45,7 @@ for json_object in json_file_contents:
 
             else:
                 print_info(
-                    "All domains are enabled by default, no need to explicitly set disabled value as false for the domain:")
+                    "No need to explicitly set disabled value as false (all are enabled by default) for the domain:")
 
         elif str(json_object["disabled"]).strip() == "":
             print_info("Disabled value is empty for the domain:")
@@ -109,32 +118,31 @@ for json_object in json_file_contents:
             aggr_uri += json_object["fragment"]
 
         if "query" in json_object and json_object["query"]:
-            if len(json_object["query"]) > 0:
-                for index, key in enumerate(json_object["query"]):
-                    if key:
-                        if not "?" in aggr_uri:
-                            aggr_uri += "?"
+            for index, key in enumerate(json_object["query"]):
+                if key:
+                    if not "?" in aggr_uri:
+                        aggr_uri += "?"
 
-                        aggr_uri += key
+                    aggr_uri += key
 
-                        if json_object["query"][key]:
-                            aggr_uri += "="
+                    if json_object["query"][key]:
+                        aggr_uri += "="
 
-                        if not isinstance(json_object["query"][key], str):
-                            print_error(
-                                "Value in query is not a string for the domain:")
-                            json_object["query"][key] = str(
-                                json_object["query"][key])
+                    if not isinstance(json_object["query"][key], str):
+                        print_error(
+                            "Value in query is not a string for the domain:")
+                        json_object["query"][key] = str(
+                            json_object["query"][key])
 
-                        aggr_uri += json_object["query"][key]
-                        aggr_uri += "&"
+                    aggr_uri += json_object["query"][key]
+                    aggr_uri += "&"
 
-                    else:
-                        print_error("Key in query is empty for the domain:")
-                        continue
+                else:
+                    print_error("Key in query is empty for the domain:")
+                    continue
 
-                if aggr_uri.endswith("&"):
-                    aggr_uri = re_sub("&$", "", aggr_uri)
+            if aggr_uri.endswith("&"):
+                aggr_uri = re_sub("&$", "", aggr_uri)
 
     else:
         print_error(
