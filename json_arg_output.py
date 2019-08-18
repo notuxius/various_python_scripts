@@ -32,8 +32,8 @@ def scheme_is_correct(input_scheme):
 
 
 try:
-    with open(sys_argv[1]) as json_arg:
-        json_file_contents = json_loads(json_arg.read())
+    with open(sys_argv[1]) as json_file:
+        json_file_contents = json_loads(json_file.read())
 
 except JSONDecodeError:
     print_error("Bad JSON file syntax")
@@ -41,6 +41,7 @@ except JSONDecodeError:
 
 except PermissionError:
     print_error("Reading of the JSON file denied")
+    sys_exit()
 
 except IndexError:
     print_error("No JSON file provided")
@@ -93,7 +94,7 @@ for json_object in json_file_contents:
 
             else:
                 print_error("User name is to long (255 characters limit)")
-        
+
         except TypeError:
             print_error("User name is not a string")
             print_error(json_object)
@@ -133,7 +134,7 @@ for json_object in json_file_contents:
                 aggr_uri += "/"
 
             aggr_uri += path
-        
+
         except (AttributeError, TypeError):
             print_error("Path is not a string")
             print_error(json_object)
