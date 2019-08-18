@@ -52,7 +52,7 @@ except FileNotFoundError:
 
 
 for json_object in json_file_contents:
-    aggr_URL = ""
+    assem_url = ""
 
     if item_is_present("disabled", json_object):
         disabled = json_object["disabled"]
@@ -70,19 +70,19 @@ for json_object in json_file_contents:
 
     if item_is_present("scheme", json_object):
         scheme = json_object["scheme"]
-        aggr_URL += scheme
-        aggr_URL += "://"
+        assem_url += scheme
+        assem_url += "://"
 
     else:
         print_info("Correct URL scheme is not defined, using HTTP")
-        aggr_URL += "http://"
+        assem_url += "http://"
 
     if item_is_present("username", json_object):
         user_name = json_object["username"]
 
         try:
             if len(user_name) <= 255:
-                aggr_URL += user_name
+                assem_url += user_name
 
             else:
                 print_error("User name is to long (255 characters limit)")
@@ -97,8 +97,8 @@ for json_object in json_file_contents:
 
             try:
                 if len(password) <= 255:
-                    aggr_URL += ":"
-                    aggr_URL += password
+                    assem_url += ":"
+                    assem_url += password
 
                 else:
                     print_error("Password is to long (255 characters limit)")
@@ -108,10 +108,10 @@ for json_object in json_file_contents:
                 print_error(json_object)
                 continue
 
-        aggr_URL += "@"
+        assem_url += "@"
 
     try:
-        aggr_URL += domain_name
+        assem_url += domain_name
 
     except TypeError:
         print_error("Domain name is not a string")
@@ -123,9 +123,9 @@ for json_object in json_file_contents:
 
         try:
             if not path.startswith("/"):
-                aggr_URL += "/"
+                assem_url += "/"
 
-            aggr_URL += path
+            assem_url += path
 
         except (AttributeError, TypeError):
             print_error("Path is not a string")
@@ -137,9 +137,9 @@ for json_object in json_file_contents:
 
             try:
                 if not fragment.startswith("#"):
-                    aggr_URL += "#"
+                    assem_url += "#"
 
-                aggr_URL += fragment
+                assem_url += fragment
 
             except (AttributeError, TypeError):
                 print_error("Fragment is not a string")
@@ -152,26 +152,26 @@ for json_object in json_file_contents:
             for index, key in enumerate(query):
                 if key:
 
-                    if not "?" in aggr_URL:
-                        aggr_URL += "?"
+                    if not "?" in assem_url:
+                        assem_url += "?"
 
-                    aggr_URL += key
+                    assem_url += key
 
                     if query[key]:
-                        aggr_URL += "="
-                        aggr_URL += str(query[key])
-                        aggr_URL += "&"
+                        assem_url += "="
+                        assem_url += str(query[key])
+                        assem_url += "&"
 
-            if aggr_URL.endswith("&"):
-                aggr_URL = re_sub("&$", "", aggr_URL)
+            if assem_url.endswith("&"):
+                assem_url = re_sub("&$", "", assem_url)
 
     if item_is_present("port", json_object):
         port = json_object["port"]
 
         try:
             if 1 <= port <= 65535:
-                aggr_URL += ":"
-                aggr_URL += str(port)
+                assem_url += ":"
+                assem_url += str(port)
 
             else:
                 print_error("Port is not in range from 1 to 65535")
@@ -188,11 +188,11 @@ for json_object in json_file_contents:
         r'(?::\d+)?' # Optional port
         r'(?:/?|[/?]\S+)$', re_ignore_case)
 
-    if re_match(pattern, aggr_URL):
-        print(aggr_URL)
+    if re_match(pattern, assem_url):
+        print(assem_url)
         print()
 
     else:
         print_error("Not valid URL")
         print_error(json_object)
-        # print_error(aggr_URL)
+        # print_error(assem_url)
