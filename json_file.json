@@ -1,0 +1,31 @@
+[
+    {
+        "scheme": "https",
+        "username": "",
+        "password": "sdg",
+        "domain_name": "",
+        "path": "/234"
+    },
+    {
+        "scheme": "http",
+        "domain_name": "www.domain2.com",
+        "disabled": true
+    },
+    {
+        "scheme": "https",
+        "domain_name": "www.gooogle.com",
+        "path": "333",
+        "query": {"gggg":123},
+        "username": "fg",
+        "password": "sdfg"
+    },
+    {
+        "scheme": "httpss",
+        "domain_name": "sdf.fgg",
+        "path": "asdf",
+        "port": 777,
+        "username": "wwwwwddwcm",
+        "password": "33",
+        "fragment": "dfgd"
+    }
+]
