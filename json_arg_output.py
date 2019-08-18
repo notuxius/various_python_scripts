@@ -9,7 +9,7 @@ from re import sub as re_sub
 
 def print_error(error):
     if isinstance(error, dict):
-        sys_stderr.write(str(error) + "\n")
+        sys_stderr.write(str(error) + "\n\n")
 
     else:
         sys_stderr.write("ERROR: " + str(error) + "\n")
@@ -20,12 +20,11 @@ def print_info(info):
         print(str(info))
 
     else:
-        print("INFO: " + str(info))
+        print("INFO:", str(info))
 
-# TODO Split this func into two
-def item_is_present_and_has_correct_type(item, item_type, input_json_object):
-    return bool(item in input_json_object and
-                isinstance(input_json_object[item], item_type) and input_json_object[item])
+
+def item_is_present(item, input_json_object):
+    return bool(item in input_json_object and input_json_object[item])
 
 
 def scheme_is_correct(input_scheme):
@@ -55,70 +54,109 @@ except FileNotFoundError:
 for json_object in json_file_contents:
     aggr_uri = ""
 
-    if item_is_present_and_has_correct_type("disabled", bool, json_object):
-        continue
+    if item_is_present("disabled", json_object):
+        disabled = json_object["disabled"]
 
-    if not item_is_present_and_has_correct_type("domain_name", str, json_object):
-        print_error("Required domain name is not defined or is empty:")
+        if isinstance(disabled, bool):
+            continue
+
+    if item_is_present("domain_name", json_object):
+        domain_name = json_object["domain_name"]
+
+    else:
+        print_error("Domain name is not defined")
         print_error(json_object)
-        print()
         continue
 
-    if item_is_present_and_has_correct_type("scheme", str, json_object):
+    if item_is_present("scheme", json_object):
         scheme = json_object["scheme"]
 
         if scheme_is_correct(scheme):
             aggr_uri += scheme
             aggr_uri += "://"
 
-    if not aggr_uri.startswith("http"):
-        print_info("Correct URI scheme is not defined, using HTTP:")
-        aggr_uri += "http://"
+        else:
+            print_error("URI scheme is not HTTP or HTTPS")
+            print_error(json_object)
+            continue
 
-    if item_is_present_and_has_correct_type("username", str, json_object):
+    # if not aggr_uri.startswith("http"):
+    #     print_info("Correct URI scheme is not defined, using HTTP")
+    #     aggr_uri += "http://"
+
+    if item_is_present("username", json_object):
         user_name = json_object["username"]
 
-        if len(user_name) <= 255:
-            aggr_uri += user_name
+        try:
+            if len(user_name) <= 255:
+                aggr_uri += user_name
 
-            if item_is_present_and_has_correct_type("password", str, json_object):
-                password = json_object["password"]
+            else:
+                print_error("User name is to long (255 characters limit)")
+        
+        except TypeError:
+            print_error("User name is not a string")
+            print_error(json_object)
+            continue
 
+        if item_is_present("password", json_object):
+            password = json_object["password"]
+
+            try:
                 if len(password) <= 255:
                     aggr_uri += ":"
                     aggr_uri += password
 
                 else:
-                    print_error("Password is to long (255 characters limit):")
+                    print_error("Password is to long (255 characters limit)")
 
-            aggr_uri += "@"
+            except TypeError:
+                print_error("Password is not a string")
+                print_error(json_object)
+                continue
 
-        else:
-            print_error("User name is to long (255 characters limit):")
+        aggr_uri += "@"
 
-    aggr_uri += json_object["domain_name"]
+    try:
+        aggr_uri += domain_name
 
-    if item_is_present_and_has_correct_type("path", str, json_object):
+    except TypeError:
+        print_error("Domain name is not a string")
+        print_error(json_object)
+        continue
+
+    if item_is_present("path", json_object):
         path = json_object["path"]
 
-        if not path.startswith("/"):
-            aggr_uri += "/"
+        try:
+            if not path.startswith("/"):
+                aggr_uri += "/"
 
-        aggr_uri += path
+            aggr_uri += path
+        
+        except (AttributeError, TypeError):
+            print_error("Path is not a string")
+            print_error(json_object)
+            continue
 
-        if item_is_present_and_has_correct_type("fragment", str, json_object):
+        if item_is_present("fragment", json_object):
             fragment = json_object["fragment"]
 
-            if not fragment.startswith("#"):
-                aggr_uri += "#"
+            try:
+                if not fragment.startswith("#"):
+                    aggr_uri += "#"
 
-            aggr_uri += fragment
+                aggr_uri += fragment
 
-        if item_is_present_and_has_correct_type("query", dict, json_object):
+            except (AttributeError, TypeError):
+                print_error("Fragment is not a string")
+                print_error(json_object)
+                continue
+
+        if item_is_present("query", json_object):
             query = json_object["query"]
 
             for index, key in enumerate(query):
-
                 if key:
 
                     if not "?" in aggr_uri:
@@ -134,15 +172,19 @@ for json_object in json_file_contents:
             if aggr_uri.endswith("&"):
                 aggr_uri = re_sub("&$", "", aggr_uri)
 
-    if item_is_present_and_has_correct_type("port", int, json_object):
+    if item_is_present("port", json_object):
         port = json_object["port"]
 
-        if 1 <= port <= 65535:
-            aggr_uri += ":"
-            aggr_uri += port
+        try:
+            if 1 <= port <= 65535:
+                aggr_uri += ":"
+                aggr_uri += str(port)
 
-        else:
-            print_error("Port is not in range from 1 to 65535:")
+            else:
+                print_error("Port is not in range from 1 to 65535")
+
+        except TypeError:
+            print_error("Port is not an integer")
 
     print(aggr_uri)
     print()
