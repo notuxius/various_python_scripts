@@ -1,13 +1,7 @@
 #!/usr/bin/env python
-from json import loads as json_loads
-from json.decoder import JSONDecodeError
 from sys import stderr as sys_stderr
 from sys import exit as sys_exit
 from sys import argv as sys_argv
-from re import sub as re_sub
-from re import compile as re_compile
-from re import match as re_match
-from re import IGNORECASE as re_ignore_case
 
 
 def print_error(error):
@@ -28,6 +22,9 @@ def print_info(info):
 
 try:
     with open(sys_argv[1]) as json_file:
+        from json import loads as json_loads
+        from json.decoder import JSONDecodeError
+
         json_file_contents = json_loads(json_file.read())
 
 except JSONDecodeError:
@@ -80,9 +77,8 @@ for json_object in json_file_contents:
                     continue
 
             else:
-                print_error("URL scheme is empty")
-                print_error(json_object)
-                continue
+                print_info("URL scheme is empty, using HTTP")
+                assem_url += "http://"
 
         except KeyError:
             print_info("URL scheme is not defined, using HTTP")
@@ -90,6 +86,7 @@ for json_object in json_file_contents:
 
         try:
             user_name = json_object["username"]
+
             try:
                 if user_name:
                     if not len(user_name) <= 255:
@@ -121,6 +118,8 @@ for json_object in json_file_contents:
 
                     assem_url += "@"
 
+                else:
+                    print_info("User name is empty")
 
             except TypeError:
                 print_error("User name is not a string")
@@ -182,7 +181,6 @@ for json_object in json_file_contents:
 
         for index, key in enumerate(query):
             if key:
-
                 if not "?" in assem_url:
                     assem_url += "?"
 
@@ -194,6 +192,8 @@ for json_object in json_file_contents:
                     assem_url += "&"
 
         if assem_url.endswith("&"):
+            from re import sub as re_sub
+
             assem_url = re_sub("&$", "", assem_url)
 
     except KeyError:
@@ -216,6 +216,10 @@ for json_object in json_file_contents:
     except KeyError:
         pass
 
+    from re import compile as re_compile
+    from re import IGNORECASE as re_ignore_case
+    from re import match as re_match
+
     pattern = re_compile(
         r'^https?://'  # http:// or https://
         # User name and optional password
@@ -225,7 +229,7 @@ for json_object in json_file_contents:
         r'localhost|'  # localhost...
         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
         r'(?::\d+)?'  # Optional port
-        r'(?:/?|[/?]\S+)$', re_ignore_case) # Optional query and frament
+        r'(?:/?|[/?]\S+)$', re_ignore_case)  # Optional query and frament
 
     if re_match(pattern, assem_url):
         print(assem_url)
