@@ -54,61 +54,74 @@ except FileNotFoundError:
 for json_object in json_file_contents:
     assem_url = ""
 
-    if item_is_present("disabled", json_object):
+    try:
         disabled = json_object["disabled"]
 
-        if isinstance(disabled, bool):
+        if isinstance(disabled, bool) and disabled:
             continue
 
-    if item_is_present("domain_name", json_object):
+    except KeyError:
+        pass
+
+    try:
         domain_name = json_object["domain_name"]
 
-    else:
-        print_error("Domain name is not defined")
-        print_error(json_object)
+    except KeyError:
         continue
 
-    if item_is_present("scheme", json_object):
-        scheme = json_object["scheme"]
-        assem_url += scheme
-        assem_url += "://"
+    if domain_name:
+        try:
+            scheme = json_object["scheme"]
 
-    else:
-        print_info("Correct URL scheme is not defined, using HTTP")
-        assem_url += "http://"
+            if scheme:
+                assem_url += scheme
+                assem_url += "://"
 
-    if item_is_present("username", json_object):
-        user_name = json_object["username"]
+        except KeyError:
+            print_info("Correct URL scheme is not defined, using HTTP")
+            assem_url += "http://"
 
         try:
-            if len(user_name) <= 255:
-                assem_url += user_name
-
-            else:
-                print_error("User name is to long (255 characters limit)")
-
-        except TypeError:
-            print_error("User name is not a string")
-            print_error(json_object)
-            continue
-
-        if item_is_present("password", json_object):
-            password = json_object["password"]
+            user_name = json_object["username"]
 
             try:
-                if len(password) <= 255:
-                    assem_url += ":"
-                    assem_url += password
+                if user_name:
+                    if len(user_name) <= 255:
+                        assem_url += user_name
 
-                else:
-                    print_error("Password is to long (255 characters limit)")
+                        try:
+                            password = json_object["password"]
+
+                            if password:
+                                if len(password) <= 255:
+                                    assem_url += ":"
+                                    assem_url += password
+
+                                else:
+                                    print_error(
+                                        "Password is to long (255 characters limit)")
+
+                        except TypeError:
+                            print_error("Password is not a string")
+                            print_error(json_object)
+                            continue
+
+                        except KeyError:
+                            pass
+
+                        assem_url += "@"
+
+                    else:
+                        print_error(
+                            "User name is to long (255 characters limit)")
 
             except TypeError:
-                print_error("Password is not a string")
+                print_error("User name is not a string")
                 print_error(json_object)
                 continue
 
-        assem_url += "@"
+        except KeyError:
+            pass
 
     try:
         assem_url += domain_name
@@ -118,7 +131,7 @@ for json_object in json_file_contents:
         print_error(json_object)
         continue
 
-    if item_is_present("path", json_object):
+    try:
         path = json_object["path"]
 
         try:
@@ -132,40 +145,49 @@ for json_object in json_file_contents:
             print_error(json_object)
             continue
 
-        if item_is_present("fragment", json_object):
-            fragment = json_object["fragment"]
+    except KeyError:
+        continue
 
-            try:
-                if not fragment.startswith("#"):
-                    assem_url += "#"
+    try:
+        fragment = json_object["fragment"]
 
-                assem_url += fragment
+        try:
+            if not fragment.startswith("#"):
+                assem_url += "#"
 
-            except (AttributeError, TypeError):
-                print_error("Fragment is not a string")
-                print_error(json_object)
-                continue
+            assem_url += fragment
 
-        if item_is_present("query", json_object):
-            query = json_object["query"]
+        except (AttributeError, TypeError):
+            print_error("Fragment is not a string")
+            print_error(json_object)
+            continue
 
-            for index, key in enumerate(query):
-                if key:
+    except KeyError:
+        pass
 
-                    if not "?" in assem_url:
-                        assem_url += "?"
+    try:
+        query = json_object["query"]
 
-                    assem_url += key
+        for index, key in enumerate(query):
+            if key:
 
-                    if query[key]:
-                        assem_url += "="
-                        assem_url += str(query[key])
-                        assem_url += "&"
+                if not "?" in assem_url:
+                    assem_url += "?"
 
-            if assem_url.endswith("&"):
-                assem_url = re_sub("&$", "", assem_url)
+                assem_url += key
 
-    if item_is_present("port", json_object):
+                if query[key]:
+                    assem_url += "="
+                    assem_url += str(query[key])
+                    assem_url += "&"
+
+        if assem_url.endswith("&"):
+            assem_url = re_sub("&$", "", assem_url)
+
+    except KeyError:
+        pass
+
+    try:
         port = json_object["port"]
 
         try:
@@ -179,13 +201,18 @@ for json_object in json_file_contents:
         except TypeError:
             print_error("Port is not an integer")
 
+    except KeyError:
+        pass
+
     pattern = re_compile(
-        r'^https?://' # http:// or https://
-        r'(?:[A-Z0-9]{1,255}:)?(?:[A-Z0-9]{1,255}@)?' # User name and optional password
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' # Domain...
-        r'localhost|' # localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or IP
-        r'(?::\d+)?' # Optional port
+        r'^https?://'  # http:// or https://
+        # User name and optional password
+        r'(?:[A-Z0-9]{1,255}:)?(?:[A-Z0-9]{1,255}@)?'
+        # Domain name...
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
+        r'(?::\d+)?'  # Optional port
         r'(?:/?|[/?]\S+)$', re_ignore_case)
 
     if re_match(pattern, assem_url):
@@ -194,5 +221,7 @@ for json_object in json_file_contents:
 
     else:
         print_error("Not valid URL")
-        print_error(json_object)
+        print(assem_url)
+        print()
+        # print_error(json_object)
         # print_error(assem_url)
