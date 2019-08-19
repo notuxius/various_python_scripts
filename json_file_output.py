@@ -26,10 +26,6 @@ def print_info(info):
         print("INFO:", str(info))
 
 
-def item_is_present(item, input_json_object):
-    return bool(item in input_json_object and input_json_object[item])
-
-
 try:
     with open(sys_argv[1]) as json_file:
         json_file_contents = json_loads(json_file.read())
@@ -74,46 +70,57 @@ for json_object in json_file_contents:
             scheme = json_object["scheme"]
 
             if scheme:
-                assem_url += scheme
-                assem_url += "://"
+                if scheme in ("http", "https"):
+                    assem_url += scheme
+                    assem_url += "://"
+
+                else:
+                    print_error("URL scheme is wrong")
+                    print_error(json_object)
+                    continue
+
+            else:
+                print_error("URL scheme is empty")
+                print_error(json_object)
+                continue
 
         except KeyError:
-            print_info("Correct URL scheme is not defined, using HTTP")
+            print_info("URL scheme is not defined, using HTTP")
             assem_url += "http://"
 
         try:
             user_name = json_object["username"]
-
             try:
                 if user_name:
-                    if len(user_name) <= 255:
-                        assem_url += user_name
-
-                        try:
-                            password = json_object["password"]
-
-                            if password:
-                                if len(password) <= 255:
-                                    assem_url += ":"
-                                    assem_url += password
-
-                                else:
-                                    print_error(
-                                        "Password is to long (255 characters limit)")
-
-                        except TypeError:
-                            print_error("Password is not a string")
-                            print_error(json_object)
-                            continue
-
-                        except KeyError:
-                            pass
-
-                        assem_url += "@"
-
-                    else:
-                        print_error(
+                    if not len(user_name) <= 255:
+                        print_info(
                             "User name is to long (255 characters limit)")
+                        user_name = user_name[:255]
+
+                    assem_url += user_name
+
+                    try:
+                        password = json_object["password"]
+
+                        if password:
+                            if not len(password) <= 255:
+                                print_info(
+                                    "Password is to long (255 characters limit)")
+                                password = password[:255]
+
+                            assem_url += ":"
+                            assem_url += password
+
+                    except TypeError:
+                        print_error("Password is not a string")
+                        print_error(json_object)
+                        continue
+
+                    except KeyError:
+                        pass
+
+                    assem_url += "@"
+
 
             except TypeError:
                 print_error("User name is not a string")
@@ -122,6 +129,11 @@ for json_object in json_file_contents:
 
         except KeyError:
             pass
+
+    else:
+        print_error("Domain name is empty")
+        print_error(json_object)
+        continue
 
     try:
         assem_url += domain_name
@@ -146,7 +158,7 @@ for json_object in json_file_contents:
             continue
 
     except KeyError:
-        continue
+        pass
 
     try:
         fragment = json_object["fragment"]
@@ -213,7 +225,7 @@ for json_object in json_file_contents:
         r'localhost|'  # localhost...
         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
         r'(?::\d+)?'  # Optional port
-        r'(?:/?|[/?]\S+)$', re_ignore_case)
+        r'(?:/?|[/?]\S+)$', re_ignore_case) # Optional query and frament
 
     if re_match(pattern, assem_url):
         print(assem_url)
@@ -221,7 +233,5 @@ for json_object in json_file_contents:
 
     else:
         print_error("Not valid URL")
-        print(assem_url)
+        print(json_object)
         print()
-        # print_error(json_object)
-        # print_error(assem_url)
