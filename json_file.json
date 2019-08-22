@@ -1,31 +1,36 @@
 [
     {
         "scheme": "https",
-        "username": "",
-        "password": "sdg",
-        "domain_name": "",
-        "path": "/234"
+        "username": "adf",
+        "password": "asdf",
+        "domain_name": "s.co",
+        "path": "/234",
+        "fragment": "sdf",
+        "query": {"gggg":123,
+            "ggg":1723},
+        "port": 333
     },
     {
-        "scheme": "http",
-        "domain_name": "www.domain2.com",
-        "disabled": true
+        "scheme": "",
+        "domain_name": "www.co.m"
+
     },
     {
         "scheme": "https",
         "domain_name": "www.gooogle.com",
         "path": "333",
-        "query": {"gggg":123},
-        "username": "fg",
+        "query": {"gggg":123,
+                    "ggg":1723},
+        "username": "j",
         "password": "sdfg"
     },
     {
-        "scheme": "httpss",
-        "domain_name": "sdf.fgg",
+        "scheme": "http",
+        "domain_name": "1.1 .1.1",
         "path": "asdf",
-        "port": 777,
-        "username": "wwwwwddwcm",
-        "password": "33",
-        "fragment": "dfgd"
+        "port": 11111,
+        "username": "user",
+        "password": "pass",
+        "fragment": "gkh"
     }
 ]

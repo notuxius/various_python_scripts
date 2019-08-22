@@ -80,8 +80,8 @@ class JsonUrlParser():
             self.add_domain_name(json_object)
             self.add_port(json_object)
             self.add_path(json_object)
-            self.add_fragment(json_object)
             self.add_query(json_object)
+            self.add_fragment(json_object)
 
             if self.is_url(json_object):
                 self.ready_urls.append(self.url)
@@ -284,7 +284,7 @@ class JsonUrlParser():
         from re import match as re_match
 
         pattern = re_compile(
-            """^https?:\/{2}(?:[a-z]{1,255}:[a-z]{1,255}@|[a-z]{1,255}@)?((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(?::[0-9]{1,5})?(?:\/[a-z0-9]{1,255})?(?:#[a-z0-9]{1,255})?(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|\?[a-z0-9_.~-]{1,255}=([a-z0-9_.~-]{1,255})|\?[a-z0-9_.~-]{1,255})?\/?$""", re_ignore_case)
+            """^https?:\/{2}(?:[^:\s]{1,255}:[^:\s]{1,255}@|[^:\s]{1,255}@)?((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(?::[0-9]{1,5})?(?:\/[a-z0-9]{1,255})?(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|\?[a-z0-9_.~-]{1,255}=([a-z0-9_.~-]{1,255}))?#?(?:[a-z0-9]{1,255})?\/?$""", re_ignore_case)
 
         if re_match(pattern, self.url):
             # print(self.url)
@@ -317,7 +317,9 @@ json_urls = JsonUrlParser("""[
         "port": 777,
         "username": "",
         "password": "",
-        "fragment": "fragm"
+        "fragment": "fragm",
+        "query": {"gggg":123,
+        "ggg":1723}
     }
 ]""")
 # json_urls.assem_urls()
