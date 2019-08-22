@@ -87,7 +87,7 @@ class JsonUrlParser():
                 self.ready_urls.append(self.url)
 
             self.url = ""
-        
+
         return self.ready_urls
 
     def print_urls(self):
@@ -284,7 +284,7 @@ class JsonUrlParser():
         from re import match as re_match
 
         pattern = re_compile(
-            """^https?:\/{2}(?:[^:\s]{1,255}:[^:\s]{1,255}@|[^:\s]{1,255}@)?((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(?::[0-9]{1,5})?(?:\/[a-z0-9]{1,255})?(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|\?[a-z0-9_.~-]{1,255}=([a-z0-9_.~-]{1,255}))?#?(?:[a-z0-9]{1,255})?\/?$""", re_ignore_case)
+            """^https?:\/{2}(?:[^:\s]{1,255}:[^:\s]{1,255}@|[^:\s]{1,255}@)?((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(?::[0-9]{1,5})?(?:\/)?(?:[a-z0-9]{1,255})?(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|\?[a-z0-9_.~-]{1,255}=(?:[a-z0-9_.~-]{1,255}))?#?(?:[a-z0-9]{1,255})?\/?$""", re_ignore_case)
 
         if re_match(pattern, self.url):
             # print(self.url)
@@ -303,7 +303,7 @@ class JsonUrlParser():
 json_urls = JsonUrlParser("""[
     {
         "scheme": "http",
-        "domain_name": "www.oc",
+        "domain_name": "",
         "path": "asdf",
         "port": 777,
         "username": "",
@@ -324,4 +324,4 @@ json_urls = JsonUrlParser("""[
 ]""")
 # json_urls.assem_urls()
 print(json_urls.assem_urls())
-# json_urls.print_urls()
+json_urls.print_urls()
