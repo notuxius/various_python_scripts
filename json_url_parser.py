@@ -22,53 +22,80 @@
 
 
 class JsonUrlParser():
-    def __init__(self):
+    def __init__(self, json_objects=None):
         from sys import argv as sys_argv
         from sys import stderr as sys_stderr
         # from sys import exit as sys_exit
 
-        self.json_file_cont = ""
+        # if self.url and self.is_url(self.url):
+        #     print("123")
+
         self.url = ""
+        self.ready_urls = []
 
-        try:
-            with open(sys_argv[1]) as self.json_file:
-                from json import loads as json_loads
-                from json.decoder import JSONDecodeError
+        from json import loads as json_loads
+        from json.decoder import JSONDecodeError
 
-                self.json_file_cont = json_loads(self.json_file.read())
+        if json_objects:
+            self.json_objects = json_loads(json_objects)
 
-        except IndexError:
-            # raise Info("No JSON file provided")
-            sys_stderr.write("No JSON file provided")
-            # sys_exit()
+            try:
+                if sys_argv[1]:
+                    print("Skipping reading of JSON file")
 
-        except FileNotFoundError:
-            sys_stderr.write("JSON file not found")
-            # sys_exit()
+            except IndexError:
+                pass
 
-        except PermissionError:
-            sys_stderr.write("Reading of the JSON file denied")
-            # sys_exit()
+        else:
+            self.json_objects = ""
 
-        except JSONDecodeError:
-            sys_stderr.write("Bad JSON file syntax")
-            # sys_exit()
+            try:
+                with open(sys_argv[1]) as json_file:
+                    self.json_objects = json_loads(json_file.read())
 
-    def parse_urls(self):
-        for json_object in self.json_file_cont:
+            except IndexError:
+                # raise Info("No JSON file provided")
+                sys_stderr.write("No JSON file provided")
+                # sys_exit()
+
+            except FileNotFoundError:
+                sys_stderr.write("JSON file not found")
+                # sys_exit()
+
+            except PermissionError:
+                sys_stderr.write("Reading of the JSON file denied")
+                # sys_exit()
+
+            except JSONDecodeError:
+                sys_stderr.write("Bad JSON file syntax")
+                # sys_exit()
+
+    def assem_urls(self):
+        for json_object in self.json_objects:
             if self.is_disabled(json_object):
                 continue
 
             self.add_scheme(json_object)
             self.add_user_password(json_object)
             self.add_domain_name(json_object)
+            self.add_port(json_object)
             self.add_path(json_object)
             self.add_fragment(json_object)
             self.add_query(json_object)
-            self.add_port(json_object)
 
             if self.is_url(json_object):
-                self.print_reset_url()
+                self.ready_urls.append(self.url)
+
+            self.url = ""
+        
+        return self.ready_urls
+
+    def print_urls(self):
+        self.assem_urls()
+
+        for url in self.ready_urls:
+            print(url)
+            print()
 
     def is_disabled(self, json_object):
         try:
@@ -257,29 +284,42 @@ class JsonUrlParser():
         from re import match as re_match
 
         pattern = re_compile(
-            r'^https?://'  # http:// or https://
-            # User name and optional password
-            r'(?:[A-Z0-9]{1,255}:)?(?:[A-Z0-9]{1,255}@)?'
-            # Domain name...
-            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
-            r'localhost|'  # localhost...
-            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
-            r'(?::\d+)?'  # Optional port
-            r'(?:/?|[/?]\S+)$', re_ignore_case)  # Optional query and frament
+            """^https?:\/{2}(?:[a-z]{1,255}:[a-z]{1,255}@|[a-z]{1,255}@)?((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(?::[0-9]{1,5})?(?:\/[a-z0-9]{1,255})?(?:#[a-z0-9]{1,255})?(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|\?[a-z0-9_.~-]{1,255}=([a-z0-9_.~-]{1,255})|\?[a-z0-9_.~-]{1,255})?\/?$""", re_ignore_case)
 
         if re_match(pattern, self.url):
+            # print(self.url)
             return True
 
         print("eNot valid URL")
         print(json_object)
+        print()
         return False
 
-    def print_reset_url(self):
-        print(self.url)
-        print()
-
-        self.url = ""
+    # def print_urls(self):
+    #     print(self.assem_urls())
 
 
-json_url = JsonUrlParser()
-json_url.parse_urls()
+# json_urls = JsonUrlParser()
+json_urls = JsonUrlParser("""[
+    {
+        "scheme": "http",
+        "domain_name": "www.oc",
+        "path": "asdf",
+        "port": 777,
+        "username": "",
+        "password": "",
+        "fragment": "fragm"
+    },
+    {
+        "scheme": "http",
+        "domain_name": "www.oc",
+        "path": "asdf",
+        "port": 777,
+        "username": "",
+        "password": "",
+        "fragment": "fragm"
+    }
+]""")
+# json_urls.assem_urls()
+print(json_urls.assem_urls())
+# json_urls.print_urls()
