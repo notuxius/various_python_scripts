@@ -1,0 +1,217 @@
+if name row NOT zero
+key pressed focus ui esc=================
+verheader count esc pressed 23
+focuscurrowfirstcoldata!!!!  !!!!end of data
+selcurrowfirstcoldata!!!! 2016-04-04 19:18:46 !!!!end of data
+key pressed focus ui esc if 000000000000000000
+zero index data 00000
+key pressed focus ui esc
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 19:24:18
++++
+focus in corrent index column 3
++++
+
+if name row IS zero
+key pressed focus ui esc=================
+verheader count esc pressed 23
+focuscurrowfirstcoldata!!!!  !!!!end of data
+selcurrowfirstcoldata!!!! 2016-04-04 19:18:46 !!!!end of data
+key pressed focus ui esc if 000000000000000000
+zero index data 00000
+key pressed focus ui esc
+current row in selection changed 7
+selcurrowfirstcoldata 2016-04-04 18:52:13
++++
+focus in corrent index column 2
++++
+
+
+
+
+
+
+FIRST CLICKED BELLOW THE TABLE THEN ON THE ADD BUTTON AND THEN ANYWHERE ELSE BUT TABLE
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+focus out verheader count 2
+focus out currow  0
+focus out first col data!!! 2016-04-04 18:25:29 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+--------------------- THEN ON THE FIRST ROW
+focus in verheader count 3
+focus in first col data!!!  !!!end of data
+focus in corrent index column 2
+---------------------
+
+
+
+FIRST CLICKED BELLOW THE TABLE THEN ON THE ADD BUTTON THEN BELLOW THE TABLE OR ON THE FIRST ROW
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+focus out verheader count 2
+focus out currow  0
+focus out first col data!!! 2016-04-04 18:25:29 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+focus in verheader count 3
+focus in first col data!!!  !!!end of data
+focus in corrent index column
+
+
+
+FIRST CLICKED ON THE BUTTON ADD THEN BELLOW THE TABLE
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+current row in selection changed 0
+selcurrowfirstcoldata
+focus in verheader count 3
+focus in first col data!!!  !!!end of data
+focus in corrent index column 2
+
+
+
+FIRST CLIKED ON THE BUTTON ADD THEN OUTSIDE THE TABLE(ON QLINEEDIT) OR OUTSIDE THE WINDOW
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+current row in selection changed 0
+selcurrowfirstcoldata
+
+
+
+FIRST CLICKED ON THE TABLE THEN ON ADD BUTTON AND THEN ON THE TABLE AGAIN
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+----------------------------------     IF CLICKED ON NOT FIRST ROW
+current row in selection changed 1
+selcurrowfirstcoldata 2016-04-04 18:16:23
+----------------------------------
+focus out verheader count 2
+focus out currow  0
+focus out first col data!!! 2016-04-04 18:25:29 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+focus in verheader count 3
+focus in first col data!!!  !!!end of data
+focus in corrent index column 2
+current row in selection changed 1
+selcurrowfirstcoldata 2016-04-04 18:25:29
+
+
+
+FIRST CLICKED ON THE TABLE THEN ON ADD BUTTON AND THEN BELLOW TABLE (OR ON THE FIRST ROW)
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+focus out verheader count 2
+focus out currow  0
+focus out first col data!!! 2016-04-04 18:25:29 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+focus in verheader count 3
+focus in first col data!!!  !!!end of data
+focus in corrent index column 2
+
+
+
+FIRST CLICKED ON THE TABLE THEN ON THE ADD BUTTON THEN OUTSIDE THE TABLE (ON QLINEEDIT) OR OUTSIDE THE WINDOW
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+current row in selection changed 1
+selcurrowfirstcoldata 2016-04-04 18:16:23
+focus out verheader count 2
+focus out currow  1
+focus out first col data!!! 2016-04-04 18:16:23 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+
+
+
+FIRST CLICKED ON THE TABLE THEN ON THE ADD BUTTON AND THEN ANYWHERE ON THE WINDOW OR OUTSIDE WINDOW
+current row in selection changed 0
+selcurrowfirstcoldata 2016-04-04 18:25:29
+focus in verheader count 2
+focus in first col data!!! 2016-04-04 18:25:29 !!!end of data
+focus in corrent index column 1
+current row in selection changed 1
+selcurrowfirstcoldata 2016-04-04 18:16:23
+focus out verheader count 2
+focus out currow  1
+focus out first col data!!! 2016-04-04 18:16:23 !!!end of data
+current row in selection changed 0
+selcurrowfirstcoldata
+
+
+
+
+
+
+
+
+
+
+
+
+
+focus in verheader count 6
+focus in first col data!!!  !!!end of data
+focus in corrent index column 2
+current row in selection changed 1
+selcurrowfirstcoldata 2016-04-17 10:42:09
+key pressed focus ui esc=================
+verheader count esc pressed 5
+focuscurrowfirstcoldata!!!!  !!!!end of data
+selcurrowfirstcoldata!!!! 2016-04-17 10:42:09 !!!!end of data
+key pressed focus ui esc if 000000000000000000
+zero index data asdf
+focus out verheader count 5
+focus out currow  -1
+focus out first col data!!! None !!!end of data
+
+
+
+
+
+
+SELECT LoanNo, COUNT(LoanNo) AS 'Count'
+FROM DedupTest031504
+GROUP BY LoanNo
+HAVING COUNT(LoanNo) > 1;
+
+
+returns:
+LoanNo Count
+46690128 2
+46861821 2
+47762138 3
+47762154 3
+48257239 2
+48257663 2
+48257719 2
+48258143 2
+
+
+
+SELECT Sum(c) FROM (SELECT LoanNo, COUNT(LoanNo) AS c FROM DedupTest031504 GROUP BY LoanNo HAVING COUNT(LoanNo) > 1) AS b;  
+
+
+
+SELECT SUM(c) FROM (SELECT COUNT(LoanNo) AS c)
+
+
+

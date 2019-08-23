@@ -1,0 +1,286 @@
+pyinstaller.exe --onefile --windowed --dist="..\..\Shared Stero" steroidsMain-0.1.29.py
+
+add to github
+
+switch to kivy framework??
+
+use semantic versioning??
+
+refactor, less (none) DRY, more Classes
+
+comment code
+
+add loading screen
+
+make consistent naming of variables: camelcase or with _
+
+add db master with custom fields creation
+
+tranfer initui to qmainwindow, add statusbar and menubar?
+
+improve overall performance - especially on sumui and printpreview for many entries
+
+don't reload app - reconnect to databases
+
+remember app settings - window position, panel positions on printprev dialog
+
+translate - qmessagebox confirmation dialog \
+http://stackoverflow.com/questions/1709528/pyqt-translating-standard-buttons
+
+if there is no main steroidsDatabase file and there backup-db folder with at least one backupdb file - restore it into main file with confirm dialog - restore or not 
+
+confirmation dialog for deletion -> dont ask for confirmation when first col is empty (on add staging row)
+
+test default margins from pdf and from print dialog on actual paper
+
+automatically scan document for word count?
+
+select first row works on linux but not working on windows???
+
+minimize sumui not working (not disabling) on linux
+
+link search label with search input field (when clicking on label
+field gets focus)
+
+selectRow(0) with current index check - do we need it?
+
+known bug with 0 rows (on empty table) adding one row and immediately pressing Esc without entering any data causes \
+    buttons to enable even if their is no visible rows - model and view tells their is and on focus out model and view \
+    get refreshed and point to zero rows - is it qtableview-model bug? When pressing on these buttons they got \
+    disabled and nothing happens because there is no actual rows in table
+
+model.select() after each operation?
+
+insert data into database immediately - on fieldchange doesn't (always) works
+
+arrange items (reLoadlinks) at startup???
+
+on escape key in zero row delete make focus and scrollTo because if there is scrollbar and the row is \
+out of view - it emit delete dialog but we not always can see the row itself
+
+make new row immune to sorting on adding stage or when adding row (addRow) disallow ordering of the table??????
+
+make dialog.exec_() == QPrintDialog.Rejected - print to pdf like in previewprint Print button?????
+
+esc key delete action on sequence - doubleclick for editing some row - then add new row - press esc without entering data \
+- and press esc again - delete dialog bug that should not be
+
+mouse scrolling changes selection?
+
+add doubleclick on linkopendocument and site link same as single click action
+
+compile for windows (pyInstaller) with icons and (other resources) in one file??
+
+use native print dialog?????
+
+addRow in new QDialow window? - for not affecting on db file change -> dbview reloading and add row temp text (that was not committed do db) loss 
+
+pressing letters if table is in focus should cycle through matching first letters in name column - for now behaviour is strange
+
+double click on not table row works for edit() - leave as is?
+
+qlineedit search not getting focus on sumui
+
+first (and other) row not selecting after search on sumui
+
+Ctl+z, Ctl+u - undo db event (and maybe, Ctl+y, Ctl+Shift+z for redo?)??
+
+leave edit trigger on return? or improve return key behaviour (return return key(?), return to focus table and edit mode instantly?)
+
+detect when table cell is editing and select currow on add event pressed second time in the middle of prev add event not complited
+
+make installer (NSIS?)
+
+reduce the height of print prevdialog to ~650?
+
+set default font for printing
+
+think about dropdown menus in table cells
+
+bind esc for clearing qlineedit
+
+clicking on the table outside table in the middle of entering data in the row then result not saved
+
+when first row adding (if there is one row in table, that is adding right now) \
+and not saving after Tab on last column (if more than one column it's saving with a crutch)
+
+esc key and select row bugs if there only one row or 0 rows
+
+buttons in main ui and sumui button don't disabling on 0 or on 1 row if esc pressed - fixed??
+
+work on vertical header resize
+
+style links background of tableview in different colour???
+
+slightly different selection of individual cell in row???
+
+create editor custom paint
+
+don't display line number in sumui near ALL CUSTOMERS (like first line near Customer)
+
+bugs with Site and Document columns when adding row - no text on Site column when choosing Document column file,\
+    clear button (defaulting) when there is no text in column
+
+bugs on Esc key press when there are two rows in the table
+
+save position of windows??
+
+translate yes no messages on question windows
+
+button for save db as.. (and open db)?????
+
+bad loocking of table black font is less readable on dark system theme - set background to white??
+
+bad loocking of the table horheaders on classic themes in winxp win7 - make it same as verheader
+
+focus out and focus in 11 column reload links??
+
+if == True: -> to if:  ???
+
+selectRow   if self.focuscurrowfirstcoldata == '':
+                print('===================key pressed focus ui esc if "__________"')
+                if self.esccurrow == 0:
+                if self.focusincurcol == 2: rework
+
+don't change rows on esc press if no createEditor where occured
+
+Esc key bug selection row if it was pressed on last but one (penultimate) row -> steroidsMain1.py
+
+version 0.2x redo addwidgets -> remake to paint method (performance)
+
+do we need tabdblclkforediting and createdsiteeditor at the same time or just one of them?
+
+possibly remake reloadlinks on focus out only???????? (performance)
+
+don't print Site column??
+
+select currow on focusin
+
+Site column - look at editorDestroyed
+
+confirm of adding new row when there is some staging row but not in db (first col (date and time) in this row is empty)
+
+confirm exit when there is staging rows not in db (first col (date and time) in this row is empty)
+
+doubleclick on actual link bug - on Site column - ignore it
+
+sync db file - select current row and begin editing current cell if it was in editing mode before syncing (this applies to new rows to)??????
+
+if try edit table when it's in readonly display popup message with text 'another instance of program is running and using db editing is not possible'
+
+copy backup file and open this file if readonly - add datetime to it for deleting by dropbox?? for 3 and more machines
+
+sumui ability for instance(s) with readonly functionality???
+
+do we need lockdb.file? or we can just use readonlydb file?
+
+create also sumuilockdb.file ?? - line no 154
+
+reloadDB button should enable editing if no other program using steroidsDatabase - not restarting app
+
+PermissionError: [Errno 13] Permission denied: './steroidsDatabase.db' if dropbox syncing???
+
+if rw instance is closed and this instance should be rw instead??:
+
+    reloaddb add sum del buttons sometimes doesn't enabled
+
+    reloaddb should use steroidsdatabase not readonlydb file
+
+    reloaddb shortcuts add sum should work again
+
+    reloaddb use local var not crdb
+
+    reloaddb reloadlinks doesn't show links
+    
+    reloadDB lockdb.file doesn't always deletes or dropbox sync lag?
+    
+    >>reloaddb newest - not switching to steroidsDatabase from readonly db after rw blocking instance has finished and this instance became rw
+    
+    reloaddb create separate file with current row in readonly mode??
+
+discover QThread:
+    https://nikolak.com/pyqt-threading-tutorial/
+    http://stackoverflow.com/questions/30823863/pyqt-progress-bar-not-updating-or-appearing-until-100
+    http://nullege.com/codes/show/src@p@y@pyqt5-HEAD@examples@widgets@styles.py/227/PyQt5.QtWidgets.QProgressBar
+    http://stackoverflow.com/questions/9682376/progress-bar-with-pyqt
+    http://stackoverflow.com/questions/19442443/busy-indication-with-pyqt-progress-bar
+    http://pythonworld.ru/gui/pyqt5-widgets.html
+    https://acaciaecho.wordpress.com/2011/01/11/pyqtprogressbar/
+    http://zetcode.com/gui/pyqt5/widgets/
+
+don't make backupdb when database don't changed??
+
+no text when reloadlinks and on tab for some time in 11 column (Site) - strange behaviour for user - look at paint() method
+
+add delay on qliteedit about 1 (0.5)sec or something for better performance??
+
+autoupdate readonly db on changes in steroidsDatabase???
+
+select previous row on datepicker
+
+checkbox for datepicker 'don't include unknown results - Під питанням'??????
+
+printpreview move data and time of document creation to the bottom of the document add sign add other info??
+
+create file with preferences like restartapprow, lockedbstate, programexitednormally...
+
+on adding new row should we check show all results checkbox - if not does it shows new row if Payment enter after meximum date?
+
+look at QtSql.QSqlQuery()
+
+don't delete lockdb.file on reloaddb restart???
+
+don't show results on qlineedit search in mainui??
+
+more selectrow on new row when pressing enter, on showallresults datepicker??--???
+
+add header and other info on printprev doc??
+
+remove (not only disable) minimize button on print preview dialog
+
+show tooltip on tableview horheaders with full name of the header
+
+handle error open doc site (like no word libreoffice no browser or no program assosiated with format or with default web browser)
+
+convert doc docx odt to txt format for possible fallback open in notepad
+
+select and edit mode on last edited cell - not only select row on program (re)starting
+
+Capitalize default values in database createeditor seteditor(model) data
+
+loading pbar ontop of the top labels from/till date range and show all widgets??
+
+make tables with additional info
+
+detect if program crashed there is lockdb.file and no 'exited normally' entry in settings file - try except?
+
+QObject::connect: invalid null parameter on dialoglocallink (on Linux only??)
+
+bug with text in edited cell on Linux - not replacing current text in cell's view (text is drawn ot top of existing one - not substituting it)
+
+sumui hor scroll bar hides on win7? - needs width resizing?+++++test on garik notebook print prev test to
+
+setcontentsmargin in qapplication on the right side
+
+print sumui link in mainui
+
+Payment Date doesn't sorting
+
+stretch sumui print width table
+
+setOutputFileName("test.pdf") + datatime
+
+print prev default zoom level
+
+header test on print prev center?
+
+add remove site, doc from db and set doc to right click not with widgets - don't think usability in tablets (touchscreens) right now
+
+
+
+python steroidsMain-0.1.26.py 
+pyinstaller.exe --onefile --windowed --dist="..\..\Shared Stero" steroidsMain-0.1.26.py
+
+editorconfig geany
+
+make build script with backup of source, bin, version bumping (setting in arguments) and compiling with pyinstaller

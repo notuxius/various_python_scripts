@@ -1,0 +1,15 @@
+﻿to compile:
+python .\additional\pyinstaller\pyinstaller.py --onefile --distpath=.\bin\ --upx-dir=.\additional\upx\ .\src\doc_name_duplicates_finder-0.1.12.py
+
+make script for versioning, cleaning versioning
+
+watch for WINWORD.EXE process with exact same name in word 2007 2010+ 2016
+maybe kill all WINWORD.EXE processes after script ends or standalone script
+
+input for column and row in tables with defaults if didn't find column(row) value PIP PID P.I.D. P.I.P or something like this
+in print func remake print with space in string and plus into without space and coma - print("aasdfas", variable)
+
+nsis installer?
+
+test docx file with same table - is it included?
+test doc file without table
