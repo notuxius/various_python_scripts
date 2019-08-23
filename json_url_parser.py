@@ -291,7 +291,7 @@ class JsonUrlParser():
             r"^https?:\/{2}(?:[^:\s]{1,255}:[^:\s]{1,255}@|[^:\s]{1,255}@)?"
             r"((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|"
             r"(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))"
-            r"(?::[0-9]{1,5})?(?:\/)?(?:[a-z0-9]{1,255})?"
+            r"(?::[0-9]{1,5})?((?:\/[^\/])?(?:[a-z0-9]{1,255})?){1,255}"
             r"(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&"
             r"[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|"
             r"\?[a-z0-9_.~-]{1,255}=(?:[a-z0-9_.~-]{1,255}))?#?"
@@ -311,20 +311,19 @@ class JsonUrlParser():
 
 
 # json_urls = JsonUrlParser()
-json_urls = JsonUrlParser("""[
-    {
-        "scheme": "http",
-        "domain_name": "www.google.com",
-        "path": "path",
-        "port": 777,
-        "username": "user",
-        "password": "pass",
-        "fragment": "fragment",
-        "query": {
-            "querykey1": "queryvalue1",
-            "querykey2": "queryvalue2"
-            }
-    }]""")
+json_urls = JsonUrlParser("""[{
+    "scheme": "https",
+    "domain_name": "www.google.com",
+    "path": "name/of/path",
+    "port": 777,
+    "username": "user",
+    "password": "pass",
+    "fragment": "fragment",
+    "query": {
+        "querykey1": "queryvalue1",
+        "querykey2": "queryvalue2"
+        }
+}]""")
 # json_urls.assem_urls()
 print(json_urls.assem_urls())
-json_urls.print_urls()
+# json_urls.print_urls()
