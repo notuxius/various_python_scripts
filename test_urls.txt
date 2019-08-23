@@ -16,7 +16,13 @@ https://u@g.com:3
 http://254.254.254.254
 http://1.2.3.4
 
-
+http://1111.222.222.222
+http://.222.222.222
+http://2.222.222
+http://2.222.222222
+http://.2.22.222.
+http://.2.2.2.2/
+http://222.222.222./
 h://www.google.com
 httpss://www.google.com
  http://www.google.com

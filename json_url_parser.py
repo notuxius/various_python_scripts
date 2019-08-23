@@ -75,6 +75,7 @@ class JsonUrlParser():
             if self.is_disabled(json_object):
                 continue
 
+            # Use format?
             self.add_scheme(json_object)
             self.add_user_password(json_object)
             self.add_domain_name(json_object)
@@ -85,6 +86,9 @@ class JsonUrlParser():
 
             if self.is_url(json_object):
                 self.ready_urls.append(self.url)
+
+            else:
+                self.ready_urls.append("Not valid URL")
 
             self.url = ""
 
@@ -303,25 +307,17 @@ class JsonUrlParser():
 json_urls = JsonUrlParser("""[
     {
         "scheme": "http",
-        "domain_name": "",
-        "path": "asdf",
+        "domain_name": "www.google.com",
+        "path": "path",
         "port": 777,
-        "username": "",
-        "password": "",
-        "fragment": "fragm"
-    },
-    {
-        "scheme": "http",
-        "domain_name": "www.oc",
-        "path": "asdf",
-        "port": 777,
-        "username": "",
-        "password": "",
-        "fragment": "fragm",
-        "query": {"gggg":123,
-        "ggg":1723}
-    }
-]""")
+        "username": "user",
+        "password": "pass",
+        "fragment": "fragment",
+        "query": {
+            "querykey1": "queryvalue1",
+            "querykey2": "queryvalue2"
+            }
+    }]""")
 # json_urls.assem_urls()
 print(json_urls.assem_urls())
 json_urls.print_urls()
