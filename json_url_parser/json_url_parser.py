@@ -20,7 +20,6 @@
 
 #         return ("INFO: " + str(self.error) + "\n")
 
-
 class JsonUrlParser():
     def __init__(self, json_objects=None):
         from sys import argv as sys_argv
@@ -134,7 +133,7 @@ class JsonUrlParser():
 
     def add_user_password(self, json_object):
         try:
-            user_name = json_object["username"]
+            user_name = json_object["user_name"]
 
             try:
                 if user_name:
@@ -316,7 +315,7 @@ json_urls = JsonUrlParser("""[{
     "domain_name": "www.google.com",
     "path": "name/of/path",
     "port": 777,
-    "username": "user",
+    "user_name": "user",
     "password": "pass",
     "fragment": "fragment",
     "query": {
