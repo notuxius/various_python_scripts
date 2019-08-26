@@ -244,16 +244,13 @@ class JsonUrlParser():
             query = json_object["query"]
 
             for _, key in enumerate(query):
-                if key:
-                    if not "?" in self.url:
-                        self.url += "?"
+                if not "?" in self.url:
+                    self.url += "?"
 
-                    self.url += key
-
-                    if query[key]:
-                        self.url += "="
-                        self.url += str(query[key])
-                        self.url += "&"
+                self.url += key
+                self.url += "="
+                self.url += str(query[key])
+                self.url += "&"
 
             if self.url.endswith("&"):
                 from re import sub as re_sub
@@ -317,9 +314,9 @@ json_urls = JsonUrlParser("""[{
     "port": 777,
     "user_name": "user",
     "password": "pass",
-    "fragment": "fragment",
+    "fragment": "",
     "query": {
-        "querykey1": "queryvalue1",
+        "": "queryvalue1",
         "querykey2": "queryvalue2"
         }
 }]""")

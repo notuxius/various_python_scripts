@@ -1,5 +1,5 @@
-https://www.google.com/
-http://www.google.com/
+https://www.google.com/ +
+http://www.google.com/ +
 http://google.com
 http://goo-gle.com.com
 https://g.c
@@ -13,34 +13,3 @@ https://u@google.com.c:33333/path?a=b&c=d-h
 https://usffuff@google.com.c:33333/?asf=asdf
 https://u@google.com.c:33333/?adfasdf=asdfasd
 https://u@g.com:3
-http://254.254.254.254
-http://1.2.3.4
-
-http://1111.222.222.222
-http://.222.222.222
-http://2.222.222
-http://2.222.222222
-http://.2.22.222.
-http://.2.2.2.2/
-http://222.222.222./
-h://www.google.com
-httpss://www.google.com
- http://www.google.com
-htt://www.google.com
-://www.google.com
-http:://www.google.com
-http//www.google.com
-http:/www.google.com
-http:www.google.com
-https:://www.google.com
-https/www.google.com
-https://www.google.
-http://www.
-https://u@google.com.c:33333/path/#a
-https://u@google.com.c:33333/path?a=
-https://u@google.com.c:33333/path?a
-https://user@g.c:1/path/#fragment
-https://u@google.com.c:33333/?key
-https://u@google.com.c:33333/?key=
-https://u@google.com.c:33333/path?
-https://u@google.com.c:33333/#fragment?a=b&c=d-h
