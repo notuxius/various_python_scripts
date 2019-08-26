@@ -30,14 +30,15 @@ def return_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_pa
     return url
 
 
-valid_url_response_default = return_url()
-valid_url_response_secure = return_url(scheme=valid_scheme_secure)
-valid_url_response_ip_single_digit_in_octets = return_url(
-    domain_name=valid_domain_name_ip_single_digit_in_octets)
-valid_url_response_ip_all_digits_in_octets = return_url(
-    domain_name=valid_domain_name_ip_all_digits_in_octets)
+# valid_url_response_default = return_url()
+# valid_url_response_secure = return_url(scheme=valid_scheme_secure)
+# valid_url_response_ip_single_digit_in_octets = return_url(
+#     domain_name=valid_domain_name_ip_single_digit_in_octets)
+# valid_url_response_ip_all_digits_in_octets = return_url(
+#     domain_name=valid_domain_name_ip_all_digits_in_octets)
 
-not_valid_url_response = "Not valid URL"
+# valid_url_response = "Valid URL"
+# not_valid_url_response = "Not valid URL"
 
 
 def return_json_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_path,
@@ -93,44 +94,35 @@ empty_query_key_value = return_json_url(querykey1="", queryvalue2="")
 empty_query_key_value_both = return_json_url(querykey1="", queryvalue1="")
 
 
-@pytest.mark.parametrize("valid_url, valid_url_resp",
-                         [(valid_url_default, valid_url_response_default),
-                          (valid_url_secure, valid_url_response_secure),
-                          (valid_url_ip_single_digit_in_octets,
-                           valid_url_response_ip_single_digit_in_octets),
-                          (valid_url_ip_all_digits_in_octets,
-                           valid_url_response_ip_all_digits_in_octets),
-                          (no_scheme, valid_url_response_default)])
-def test_valid_url_response(valid_url, valid_url_resp):
-    assert "".join(json_url_parser(
-        valid_url).assem_urls()) == valid_url_resp, "Valid URL"
+@pytest.mark.parametrize("valid_url",
+                         [valid_url_default,
+                          valid_url_secure,
+                          valid_url_ip_single_digit_in_octets,
+                          valid_url_ip_all_digits_in_octets,
+                          no_scheme])
+def test_valid_url_response(valid_url):
+    for header in json_url_parser(valid_url).assem_urls():
+        assert "Valid URL" in header
 
 
-@pytest.mark.parametrize("not_valid_url, not_valid_url_resp",
-                         [(wrong_scheme_less_letters, not_valid_url_response),
-                          (wrong_scheme_excessive_letter, not_valid_url_response),
-                          (wrong_scheme_space_before, not_valid_url_response),
-                          (wrong_scheme_excessive_colon, not_valid_url_response),
-                          (wrong_domain_name, not_valid_url_response),
-                          (wrong_domain_name_dot_after_tld, not_valid_url_response),
-                          (wrong_domain_name_dot_after_host_name,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_1st_octet_excessive_digit,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_last_octet_excessive_digit,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_missing_1st_octet_with_dot,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_missing_octet_without_dot,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_missing_last_octet_with_dot,
-                           not_valid_url_response),
-                          (wrong_ip_domain_name_missing_1st_last_octets_with_dots,
-                           not_valid_url_response),
-                          (empty_query_key, not_valid_url_response),
-                          (empty_query_value, not_valid_url_response),
-                          (empty_query_key_value, not_valid_url_response),
-                          (empty_query_key_value_both, not_valid_url_response), ])
-def test_return_not_valid_url(not_valid_url, not_valid_url_resp):
-    assert "".join(json_url_parser(
-        not_valid_url).assem_urls()) == not_valid_url_resp, not_valid_url_response
+@pytest.mark.parametrize("not_valid_url",
+                         [wrong_scheme_less_letters,
+                          wrong_scheme_excessive_letter,
+                          wrong_scheme_space_before,
+                          wrong_scheme_excessive_colon,
+                          wrong_domain_name,
+                          wrong_domain_name_dot_after_tld,
+                          wrong_domain_name_dot_after_host_name,
+                          wrong_ip_domain_name_1st_octet_excessive_digit,
+                          wrong_ip_domain_name_last_octet_excessive_digit,
+                          wrong_ip_domain_name_missing_1st_octet_with_dot,
+                          wrong_ip_domain_name_missing_octet_without_dot,
+                          wrong_ip_domain_name_missing_last_octet_with_dot,
+                          wrong_ip_domain_name_missing_1st_last_octets_with_dots,
+                          empty_query_key,
+                          empty_query_value,
+                          empty_query_key_value,
+                          empty_query_key_value_both])
+def test_return_not_valid_url(not_valid_url):
+    for header in json_url_parser(not_valid_url).assem_urls():
+        assert "Not valid URL" in header
