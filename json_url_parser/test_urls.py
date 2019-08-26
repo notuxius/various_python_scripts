@@ -57,13 +57,19 @@ valid_url_ip_single_digit_in_octets = return_url(
 valid_url_ip_all_digits_in_octets = return_url(
     domain_name=valid_domain_name_ip_all_digits_in_octets)
 no_scheme = return_url(scheme="")
-wrong_domain_name = return_url(domain_name="wwwgooglecom")
-empty_query_value = return_url(queryvalue1="", queryvalue2="")
-wrong_scheme_less_letters = return_url(scheme="htt")
-wrong_scheme_excessive_letter = return_url(scheme="httpss")
-wrong_scheme_space_before = return_url(scheme=" httpss")
-wrong_scheme_excessive_colon = return_url(scheme="http:")
-wrong_scheme_no_colon = return_url(scheme="http:")
+wrong_domain_name = return_url(domain_name=valid_domain_name.replace(".", ""))
+wrong_domain_name_dot_after_tld = return_url(domain_name=valid_domain_name + ".")
+wrong_domain_name_dot_after_host_name = return_url(domain_name=str(valid_domain_name.split(".")[1:]) + ".")
+wrong_scheme_less_letters = return_url(scheme=valid_scheme[:-1])
+wrong_scheme_excessive_letter = return_url(scheme=valid_scheme_secure + "s")
+wrong_scheme_space_before = return_url(scheme=" " + valid_scheme)
+wrong_scheme_excessive_colon = return_url(scheme=valid_scheme + ":")
+empty_query_key = return_url(querykey1="")
+empty_query_value = return_url(queryvalue2="")
+empty_query_key_value = return_url(querykey1="", queryvalue2="")
+empty_query_key_value_both = return_url(querykey1="", queryvalue1="")
+
+
 wrong_ip_domain_name_1st_octet_excessive_digit = return_url(
     domain_name="2222.2.22.222")
 wrong_ip_domain_name_last_octet_excessive_digit = return_url(
@@ -93,12 +99,16 @@ def test_valid_url_response(valid_url, valid_url_resp):
 
 @pytest.mark.parametrize("not_valid_url, not_valid_url_resp",
                          [(wrong_domain_name, not_valid_url_response),
+                          (wrong_domain_name_dot_after_tld, not_valid_url_response),
+                          (wrong_domain_name_dot_after_host_name, not_valid_url_response),
+                          (empty_query_key, not_valid_url_response),
                           (empty_query_value, not_valid_url_response),
+                          (empty_query_key_value, not_valid_url_response),
+                          (empty_query_key_value_both, not_valid_url_response),
                           (wrong_scheme_less_letters, not_valid_url_response),
                           (wrong_scheme_excessive_letter, not_valid_url_response),
                           (wrong_scheme_space_before, not_valid_url_response),
                           (wrong_scheme_excessive_colon, not_valid_url_response),
-                          (wrong_scheme_no_colon, not_valid_url_response),
                           (wrong_ip_domain_name_1st_octet_excessive_digit,
                            not_valid_url_response),
                           (wrong_ip_domain_name_last_octet_excessive_digit,
