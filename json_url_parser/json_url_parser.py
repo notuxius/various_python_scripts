@@ -23,9 +23,11 @@
 class JsonUrlParser():
     def __init__(self, json_objects=None):
         from sys import argv as sys_argv
-        # from sys import stderr as sys_stderr
 
         self.url = ""
+        self.valid_url = "Valid URL"
+        self.not_valid_url = "Not valid URL"
+        self.error = "Error"
         self.output = {}
 
         from json import loads as json_loads
@@ -42,16 +44,16 @@ class JsonUrlParser():
                     self.json_objects = json_loads(json_file.read())
 
             except IndexError:
-                self.output["Error:"] = "No JSON file provided"
+                self.output[f"{self.error}:"] = "No JSON file provided"
 
             except FileNotFoundError:
-                self.output["Error:"] = "JSON file not found"
+                self.output[f"{self.error}:"] = "JSON file not found"
 
             except PermissionError:
-                self.output["Error:"] = "Reading of the JSON file denied"
+                self.output[f"{self.error}:"] = "Reading of the JSON file denied"
 
             except JSONDecodeError:
-                self.output["Error:"] = "Bad JSON file syntax"
+                self.output[f"{self.error}:"] = "Bad JSON file syntax"
 
     def assem_urls(self):
         valid_url_num = 1
@@ -69,25 +71,34 @@ class JsonUrlParser():
             self.url_add_fragment(json_object)
 
             if self.is_correct_url():
-                self.output[f"Valid URL #{valid_url_num}:"] = self.url
+                self.output[f"{self.valid_url} #{valid_url_num}:"] = self.url
                 valid_url_num += 1
 
             else:
-                self.output[f"Not valid URL #{not_valid_url_num}:"] = json_object
+                self.output[f"{self.not_valid_url} #{not_valid_url_num}:"] = json_object
                 not_valid_url_num += 1
-                # print("123", not_valid_url_num)
 
             self.url = ""
 
         return self.output
 
     def print_output(self):
+        from sys import stderr as sys_stderr
+
         self.assem_urls()
 
         for header in sorted(self.output):
-            print(header)
-            print(self.output[header])
-            print()
+            if self.error in header or self.not_valid_url in header:
+                sys_stderr.write(str(header))
+                sys_stderr.write("\n")
+                sys_stderr.write(str(self.output[header]))
+                sys_stderr.write("\n")
+                sys_stderr.write("\n")
+
+            else:
+                print(header)
+                print(self.output[header])
+                print()
 
     def is_disabled(self, json_object):
         try:
@@ -130,8 +141,6 @@ class JsonUrlParser():
 
                 # except TypeError:
                 #     self.output.append("ePassword is not a string")
-                #     self.output.append(json_object)
-                #     return False
 
                 except KeyError:
                     pass
@@ -140,16 +149,12 @@ class JsonUrlParser():
 
             # except TypeError:
             #     self.output.append("eUser name is not a string")
-            #     self.output.append(json_object)
-            #     return False
 
         except KeyError:
             return False
 
         # else:
-        #     raise ParseError("URL scheme is wrong")
-        # print_error(json_object)
-        # continue
+        #     raise ParseError("eURL scheme is wrong")
 
     def url_add_domain_name(self, json_object):
         try:
@@ -164,14 +169,10 @@ class JsonUrlParser():
 
             except TypeError:
                 # self.output.append("eDomain name is not a string")
-                # self.output.append(json_object)
-                # return False
                 pass
 
         # else:
         #     self.output.append("eDomain name is empty")
-        #     self.output.append(json_object)
-        #     return False
 
     def url_add_path(self, json_object):
         try:
@@ -185,8 +186,6 @@ class JsonUrlParser():
 
             # except (AttributeError, TypeError):
             #     self.output.append("ePath is not a string")
-            #     self.output.append(json_object)
-            #     return False
 
         except KeyError:
             return False
@@ -203,8 +202,6 @@ class JsonUrlParser():
 
             # except (AttributeError, TypeError):
             #     self.output.append("eFragment is not a string")
-            #     self.output.append(json_object)
-            #     return False
 
         except KeyError:
             return False
@@ -265,22 +262,15 @@ class JsonUrlParser():
             r"(?:[a-z0-9]{1,255})?\/?$", re_ignore_case)
 
         if re_match(pattern, self.url):
-            # print(self.url)
             return True
 
-        # print("eNot valid URL")
-        # print(json_object)
-        # print()
         return False
-
-    # def print_output(self):
-    #     print(self.assem_urls())
 
 
 json_urls = JsonUrlParser()
 # json_urls = JsonUrlParser("""[{
 #     "scheme": "https",
-#     "domain_name": "www.google.com",
+#     "domain_name": "www.duckduckgo.com",
 #     "path": "name/of/path",
 #     "port": 7778,
 #     "user_name": "user",

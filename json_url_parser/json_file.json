@@ -1,7 +1,7 @@
 [
     {
         "scheme": "https",
-        "username": "adf",
+        "user_name": "adf",
         "password": "asdf",
         "domain_name": "s.co",
         "path": "/234",
@@ -11,25 +11,25 @@
         "port": 333
     },
     {
-        "scheme": "",
+        "scheme": "http",
         "domain_name": "www.co.m"
 
     },
     {
         "scheme": "https",
-        "domain_name": "www.gooogle.com",
+        "domain_name": "www.duckduckgo.com",
         "path": "333",
         "query": {"gggg":123,
                     "ggg":1723},
-        "username": "j",
+        "user_name": "j",
         "password": "sdfg"
     },
     {
-        "scheme": "http",
-        "domain_name": "1.1 .1.1",
+        "scheme": "htt p",
+        "domain_name": "1.1.1.1",
         "path": "asdf",
         "port": 11111,
-        "username": "user",
+        "user_name": "user",
         "password": "pass",
         "fragment": "gkh"
     }
