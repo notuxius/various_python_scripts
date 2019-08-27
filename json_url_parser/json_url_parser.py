@@ -68,7 +68,6 @@ class JsonUrlParser():
             self.url_add_query(json_object)
             self.url_add_fragment(json_object)
 
-            # TODO Sort output
             if self.is_correct_url():
                 self.output[f"Valid URL #{valid_url_num}:"] = self.url
                 valid_url_num += 1
@@ -82,12 +81,10 @@ class JsonUrlParser():
 
         return self.output
 
-
-    # TODO arrange by valid urls first? and then by not valid
     def print_output(self):
         self.assem_urls()
 
-        for header in self.output:
+        for header in sorted(self.output):
             print(header)
             print(self.output[header])
             print()
