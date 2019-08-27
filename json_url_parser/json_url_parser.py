@@ -62,51 +62,6 @@ class JsonUrlParser():
     def error(self=""):
         return "Error:"
 
-    def assem_urls(self):
-        valid_url_num = 1
-        not_valid_url_num = 1
-        for json_object in self.json_objects:
-            if self.is_disabled(json_object):
-                continue
-
-            self.url_add_scheme(json_object)
-            self.url_add_user_password(json_object)
-            self.url_add_domain_name(json_object)
-            self.url_add_port(json_object)
-            self.url_add_path(json_object)
-            self.url_add_query(json_object)
-            self.url_add_fragment(json_object)
-
-            if self.is_correct_url():
-                self.output[f"{self.valid_url()} #{valid_url_num}:"] = self.url
-                valid_url_num += 1
-
-            else:
-                self.output[f"{self.not_valid_url()} #{not_valid_url_num}:"] = json_object
-                not_valid_url_num += 1
-
-            self.url = ""
-
-        return self.output
-
-    def print_output(self):
-        from sys import stderr as sys_stderr
-
-        self.assem_urls()
-
-        for header in sorted(self.output):
-            if self.error() in header or self.not_valid_url() in header:
-                sys_stderr.write(str(header))
-                sys_stderr.write("\n")
-                sys_stderr.write(str(self.output[header]))
-                sys_stderr.write("\n")
-                sys_stderr.write("\n")
-
-            else:
-                print(header)
-                print(self.output[header])
-                print()
-
     def is_disabled(self, json_object):
         try:
             disabled = json_object["disabled"]
@@ -197,18 +152,22 @@ class JsonUrlParser():
         except KeyError:
             return False
 
-    def url_add_fragment(self, json_object):
+    def url_add_port(self, json_object):
         try:
-            fragment = json_object["fragment"]
+            port = json_object["port"]
 
-            # try:
-            if not fragment.startswith("#"):
-                self.url += "#"
+            try:
+                if 1 <= port <= 65535:
+                    self.url += ":"
+                    self.url += str(port)
+                    return True
 
-            self.url += fragment
+                # self.output.append("ePort is not in range fropy m 1 to 65535")
+                self.url += ":wrongport"
 
-            # except (AttributeError, TypeError):
-            #     self.output.append("eFragment is not a string")
+            except TypeError:
+                # self.output.append("ePort is not an integer")
+                pass
 
         except KeyError:
             pass
@@ -234,22 +193,18 @@ class JsonUrlParser():
         except KeyError:
             pass
 
-    def url_add_port(self, json_object):
+    def url_add_fragment(self, json_object):
         try:
-            port = json_object["port"]
+            fragment = json_object["fragment"]
 
-            try:
-                if 1 <= port <= 65535:
-                    self.url += ":"
-                    self.url += str(port)
-                    return True
+            # try:
+            if not fragment.startswith("#"):
+                self.url += "#"
 
-                # self.output.append("ePort is not in range fropy m 1 to 65535")
-                self.url += ":wrongport"
+            self.url += fragment
 
-            except TypeError:
-                # self.output.append("ePort is not an integer")
-                pass
+            # except (AttributeError, TypeError):
+            #     self.output.append("eFragment is not a string")
 
         except KeyError:
             pass
@@ -273,6 +228,51 @@ class JsonUrlParser():
             return True
 
         return False
+
+    def assem_urls(self):
+        valid_url_num = 1
+        not_valid_url_num = 1
+        for json_object in self.json_objects:
+            if self.is_disabled(json_object):
+                continue
+
+            self.url_add_scheme(json_object)
+            self.url_add_user_password(json_object)
+            self.url_add_domain_name(json_object)
+            self.url_add_port(json_object)
+            self.url_add_path(json_object)
+            self.url_add_query(json_object)
+            self.url_add_fragment(json_object)
+
+            if self.is_correct_url():
+                self.output[f"{self.valid_url()} #{valid_url_num}:"] = self.url
+                valid_url_num += 1
+
+            else:
+                self.output[f"{self.not_valid_url()} #{not_valid_url_num}:"] = json_object
+                not_valid_url_num += 1
+
+            self.url = ""
+
+        return self.output
+
+    def print_output(self):
+        from sys import stderr as sys_stderr
+
+        self.assem_urls()
+
+        for header in sorted(self.output):
+            if self.error() in header or self.not_valid_url() in header:
+                sys_stderr.write(str(header))
+                sys_stderr.write("\n")
+                sys_stderr.write(str(self.output[header]))
+                sys_stderr.write("\n")
+                sys_stderr.write("\n")
+
+            else:
+                print(header)
+                print(self.output[header])
+                print()
 
 
 json_urls = JsonUrlParser()
