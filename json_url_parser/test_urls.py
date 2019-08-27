@@ -18,11 +18,10 @@ valid_domain_name_ip_single_digit_in_octets = "2.1.1.2"
 valid_domain_name_ip_all_digits_in_octets = "122.213.123.222"
 
 
-def return_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_path,
-               port=valid_port, user_name=valid_user_name, password=valid_password,
-               fragment=valid_fragment,
+def return_url(scheme=valid_scheme, user_name=valid_user_name, password=valid_password,
+               domain_name=valid_domain_name, port=valid_port, path=valid_path,
                querykey1=valid_querykey1, queryvalue1=valid_queryvalue1,
-               querykey2=valid_querykey2, queryvalue2=valid_queryvalue2):
+               querykey2=valid_querykey2, queryvalue2=valid_queryvalue2, fragment=valid_fragment):
 
     url = f"{scheme}://{user_name}:{password}@{domain_name}:{port}/{path}?\
 {querykey1}={queryvalue1}&{querykey2}={queryvalue2}#{fragment}"
@@ -30,16 +29,15 @@ def return_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_pa
     return url
 
 
-def return_json_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_path,
-                    port=valid_port, user_name=valid_user_name, password=valid_password,
-                    fragment=valid_fragment,
-                    querykey1=valid_querykey1, queryvalue1=valid_queryvalue1,
-                    querykey2=valid_querykey2, queryvalue2=valid_queryvalue2):
+def return_json_url(scheme=valid_scheme, user_name=valid_user_name, password=valid_password,
+               domain_name=valid_domain_name, port=valid_port, path=valid_path,
+               querykey1=valid_querykey1, queryvalue1=valid_queryvalue1,
+               querykey2=valid_querykey2, queryvalue2=valid_queryvalue2, fragment=valid_fragment):
 
-    json_url = f'[{{"scheme": "{scheme}", "domain_name": "{domain_name}", \
-"path": "{path}", "port": {port}, "user_name": "{user_name}", \
-"password": "{password}", "fragment": "{fragment}", \
-"query": {{"{querykey1}": "{queryvalue1}", "{querykey2}": "{queryvalue2}"}}}}]'
+    json_url = f'[{{"scheme": "{scheme}", "user_name": "{user_name}", "password": "{password}", \
+"domain_name": "{domain_name}", "port": {port}, "path": "{path}", \
+"query": {{"{querykey1}": "{queryvalue1}", "{querykey2}": "{queryvalue2}"}}, \
+"fragment": "{fragment}"}}]'
 
     return json_url
 
@@ -57,6 +55,11 @@ wrong_scheme_excessive_letter = return_json_url(
     scheme=valid_scheme_secure + "s")
 wrong_scheme_space_before = return_json_url(scheme=" " + valid_scheme)
 wrong_scheme_excessive_colon = return_json_url(scheme=valid_scheme + ":")
+
+wrong_user_name_with_space = return_json_url(fragment="user name")
+wrong_user_name_with_colon = return_json_url(fragment="user:name")
+wrong_password_with_space = return_json_url(fragment="pass word")
+wrong_password_with_colon = return_json_url(fragment="pass:word")
 
 wrong_domain_name = return_json_url(
     domain_name=valid_domain_name.replace(".", ""))
@@ -77,10 +80,21 @@ wrong_ip_domain_name_missing_last_octet_with_dot = return_json_url(
 wrong_ip_domain_name_missing_1st_last_octets_with_dots = return_json_url(
     domain_name=".2.22.111.")
 
+wrong_0_port = return_json_url(port="0")
+wrong_port_6_digits = return_json_url(port="111111")
+
+wrong_path_with_space = return_json_url(path="name/o f/path")
+wrong_path_prefix_double_slash = return_json_url(path="//name/of/path")
+wrong_path_postfix_double_slash = return_json_url(path="name/of/path//")
+
 empty_query_key = return_json_url(querykey1="")
 empty_query_value = return_json_url(queryvalue2="")
 empty_query_key_value = return_json_url(querykey1="", queryvalue2="")
 empty_query_key_value_both = return_json_url(querykey1="", queryvalue1="")
+
+wrong_fragment_with_space = return_json_url(fragment="frag ment")
+wrong_fragment_prefix_double_hash = return_json_url(fragment="##fragment")
+wrong_fragment_middle_hash = return_json_url(fragment="frag#ment")
 
 valid_url_response = json_url_parse.valid_url()
 not_valid_url_response = json_url_parse.not_valid_url()
@@ -102,9 +116,18 @@ def test_valid_url_response(valid_url):
                           wrong_scheme_excessive_letter,
                           wrong_scheme_space_before,
                           wrong_scheme_excessive_colon,
+                          wrong_user_name_with_space,
+                          wrong_user_name_with_colon,
+                          wrong_password_with_space,
+                          wrong_password_with_colon,
                           wrong_domain_name,
                           wrong_domain_name_dot_after_tld,
                           wrong_domain_name_dot_after_host_name,
+                          wrong_0_port,
+                          wrong_port_6_digits,
+                          wrong_path_with_space,
+                          wrong_path_prefix_double_slash,
+                          wrong_path_postfix_double_slash,
                           wrong_ip_domain_name_1st_octet_excessive_digit,
                           wrong_ip_domain_name_last_octet_excessive_digit,
                           wrong_ip_domain_name_missing_1st_octet_with_dot,
@@ -114,7 +137,11 @@ def test_valid_url_response(valid_url):
                           empty_query_key,
                           empty_query_value,
                           empty_query_key_value,
-                          empty_query_key_value_both])
+                          empty_query_key_value_both,
+                          wrong_fragment_with_space,
+                          wrong_fragment_prefix_double_hash,
+                          wrong_fragment_middle_hash])
 def test_return_not_valid_url(not_valid_url):
+    # print(json_url_parse(not_valid_url).assem_urls())
     for header in json_url_parse(not_valid_url).assem_urls():
         assert not_valid_url_response in header

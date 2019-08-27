@@ -242,9 +242,10 @@ class JsonUrlParser():
                 if 1 <= port <= 65535:
                     self.url += ":"
                     self.url += str(port)
+                    return True
 
-                # else:
-                #     self.output.append("ePort is not in range from 1 to 65535")
+                # self.output.append("ePort is not in range fropy m 1 to 65535")
+                self.url += ":wrongport"
 
             except TypeError:
                 # self.output.append("ePort is not an integer")
