@@ -1,5 +1,5 @@
 import pytest
-from json_url_parser import JsonUrlParser as json_url_parser
+from json_url_parser import JsonUrlParser as json_url_parse
 
 
 valid_scheme = "http"
@@ -82,8 +82,8 @@ empty_query_value = return_json_url(queryvalue2="")
 empty_query_key_value = return_json_url(querykey1="", queryvalue2="")
 empty_query_key_value_both = return_json_url(querykey1="", queryvalue1="")
 
-valid_url_response = "Valid URL"
-not_valid_url_response = "Not valid URL"
+valid_url_response = json_url_parse.valid_url()
+not_valid_url_response = json_url_parse.not_valid_url()
 
 
 @pytest.mark.parametrize("valid_url",
@@ -93,7 +93,7 @@ not_valid_url_response = "Not valid URL"
                           valid_url_ip_all_digits_in_octets,
                           no_scheme])
 def test_valid_url_response(valid_url):
-    for header in json_url_parser(valid_url).assem_urls():
+    for header in json_url_parse(valid_url).assem_urls():
         assert valid_url_response in header
 
 
@@ -116,5 +116,5 @@ def test_valid_url_response(valid_url):
                           empty_query_key_value,
                           empty_query_key_value_both])
 def test_return_not_valid_url(not_valid_url):
-    for header in json_url_parser(not_valid_url).assem_urls():
+    for header in json_url_parse(not_valid_url).assem_urls():
         assert not_valid_url_response in header

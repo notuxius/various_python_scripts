@@ -25,9 +25,6 @@ class JsonUrlParser():
         from sys import argv as sys_argv
 
         self.url = ""
-        self.valid_url = "Valid URL"
-        self.not_valid_url = "Not valid URL"
-        self.error = "Error"
         self.output = {}
 
         from json import loads as json_loads
@@ -44,16 +41,26 @@ class JsonUrlParser():
                     self.json_objects = json_loads(json_file.read())
 
             except IndexError:
-                self.output[f"{self.error}:"] = "No JSON file provided"
+                self.output[self.error()] = "No JSON file provided"
 
             except FileNotFoundError:
-                self.output[f"{self.error}:"] = "JSON file not found"
+                self.output[self.error()] = "JSON file not found"
 
             except PermissionError:
-                self.output[f"{self.error}:"] = "Reading of the JSON file denied"
+                self.output[self.error()] = "Reading of the JSON file denied"
 
             except JSONDecodeError:
-                self.output[f"{self.error}:"] = "Bad JSON file syntax"
+                self.output[self.error()] = "Bad JSON file syntax"
+
+    # TODO fix workaround with self for importing into test_urls.py file
+    def valid_url(self=""):
+        return "Valid URL"
+
+    def not_valid_url(self=""):
+        return "Not valid URL"
+
+    def error(self=""):
+        return "Error:"
 
     def assem_urls(self):
         valid_url_num = 1
@@ -71,11 +78,11 @@ class JsonUrlParser():
             self.url_add_fragment(json_object)
 
             if self.is_correct_url():
-                self.output[f"{self.valid_url} #{valid_url_num}:"] = self.url
+                self.output[f"{self.valid_url()} #{valid_url_num}:"] = self.url
                 valid_url_num += 1
 
             else:
-                self.output[f"{self.not_valid_url} #{not_valid_url_num}:"] = json_object
+                self.output[f"{self.not_valid_url()} #{not_valid_url_num}:"] = json_object
                 not_valid_url_num += 1
 
             self.url = ""
@@ -88,7 +95,7 @@ class JsonUrlParser():
         self.assem_urls()
 
         for header in sorted(self.output):
-            if self.error in header or self.not_valid_url in header:
+            if self.error() in header or self.not_valid_url() in header:
                 sys_stderr.write(str(header))
                 sys_stderr.write("\n")
                 sys_stderr.write(str(self.output[header]))
