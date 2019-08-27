@@ -4,7 +4,7 @@ from json_url_parser import JsonUrlParser as json_url_parser
 
 valid_scheme = "http"
 valid_scheme_secure = "https"
-valid_domain_name = "www.google.com"
+valid_domain_name = "www.duckduckgo.com"
 valid_path = "name/of/path"
 valid_port = 12345
 valid_user_name = "user"
@@ -28,17 +28,6 @@ def return_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_pa
 {querykey1}={queryvalue1}&{querykey2}={queryvalue2}#{fragment}"
 
     return url
-
-
-# valid_url_response_default = return_url()
-# valid_url_response_secure = return_url(scheme=valid_scheme_secure)
-# valid_url_response_ip_single_digit_in_octets = return_url(
-#     domain_name=valid_domain_name_ip_single_digit_in_octets)
-# valid_url_response_ip_all_digits_in_octets = return_url(
-#     domain_name=valid_domain_name_ip_all_digits_in_octets)
-
-# valid_url_response = "Valid URL"
-# not_valid_url_response = "Not valid URL"
 
 
 def return_json_url(scheme=valid_scheme, domain_name=valid_domain_name, path=valid_path,
@@ -93,6 +82,9 @@ empty_query_value = return_json_url(queryvalue2="")
 empty_query_key_value = return_json_url(querykey1="", queryvalue2="")
 empty_query_key_value_both = return_json_url(querykey1="", queryvalue1="")
 
+valid_url_response = "Valid URL"
+not_valid_url_response = "Not valid URL"
+
 
 @pytest.mark.parametrize("valid_url",
                          [valid_url_default,
@@ -102,7 +94,7 @@ empty_query_key_value_both = return_json_url(querykey1="", queryvalue1="")
                           no_scheme])
 def test_valid_url_response(valid_url):
     for header in json_url_parser(valid_url).assem_urls():
-        assert "Valid URL" in header
+        assert valid_url_response in header
 
 
 @pytest.mark.parametrize("not_valid_url",
@@ -125,4 +117,4 @@ def test_valid_url_response(valid_url):
                           empty_query_key_value_both])
 def test_return_not_valid_url(not_valid_url):
     for header in json_url_parser(not_valid_url).assem_urls():
-        assert "Not valid URL" in header
+        assert not_valid_url_response in header
