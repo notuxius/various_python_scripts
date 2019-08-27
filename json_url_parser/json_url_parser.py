@@ -211,7 +211,7 @@ class JsonUrlParser():
             #     self.output.append("eFragment is not a string")
 
         except KeyError:
-            return False
+            pass
 
     def url_add_query(self, json_object):
         try:
@@ -258,15 +258,15 @@ class JsonUrlParser():
         from re import IGNORECASE as re_ignore_case
         from re import match as re_match
 
+        # TODO improve regex - hangs on some combination of input
         pattern = re_compile(
-            r"^https?:\/{2}(?:[^:\s]{1,255}:[^:\s]{1,255}@|[^:\s]{1,255}@)?"
-            r"((?:[a-z-]{1,255}\.)+(?:[a-z]{1,6})|"
-            r"(?:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))"
-            r"(?::[0-9]{1,5})?((?:\/[^\/])?(?:[a-z0-9]{1,255})?){1,255}"
-            r"(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}&"
-            r"[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){1,255}|"
-            r"\?[a-z0-9_.~-]{1,255}=(?:[a-z0-9_.~-]{1,255}))?#?"
-            r"(?:[a-z0-9]{1,255})?\/?$", re_ignore_case)
+            r"^https?:\/{2}(?:(?:[^:\s]{1,255}:)?[^:\s]{1,255}@)?"
+            r"(?:(?:[a-z-]{1,63}\.)+(?:[a-z]{1,63})|"
+            r"(?:(?:[0-9]{1,3}\.){3}[0-9]{1,3}))"
+            r"(?::[0-9]{1,5})?(?:(?:\/[^\/])?(?:[a-z0-9]{1,2000})?){1,255}"
+            r"(?:(?:\?[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255})"
+            r"(?:&[a-z0-9_.~-]{1,255}=[a-z0-9_.~-]{1,255}){0,255})?"
+            r"(?:#[a-z0-9]{0,255})?\/?$", re_ignore_case)
 
         if re_match(pattern, self.url):
             return True
